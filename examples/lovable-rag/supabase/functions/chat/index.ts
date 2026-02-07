@@ -79,8 +79,8 @@ serve(async (req) => {
       .rpc("match_chunks", {
         query_embedding: queryEmbedding,
         target_folder_id: folder_id,
-        match_count: 5,
-        match_threshold: 0.65,
+        match_count: 8,
+        match_threshold: 0.5,
       });
 
     if (matchError) {
@@ -93,7 +93,7 @@ serve(async (req) => {
       .select("role, content")
       .eq("chat_id", activeChatId)
       .order("created_at", { ascending: false })
-      .limit(10);
+      .limit(20);
 
     const previousMessages = (history || []).reverse();
 
@@ -112,13 +112,16 @@ serve(async (req) => {
       )
       .join("\n\n---\n\n");
 
-    const systemPrompt = `Olet avulias assistentti joka vastaa kysymyksiin AINOASTAAN annettujen lahdedokumenttien perusteella.
+    const systemPrompt = `Olet asiantunteva assistentti joka auttaa kayttajaa ymmartamaan dokumenttien sisaltoa.
 
-Saannot:
-- Vastaa VAIN jos tieto loytyy lahteista. Jos tietoa ei ole, sano se rehellisesti.
-- Viittaa lahteisiin vastauksessasi: [Lahde 1], [Lahde 2] jne.
-- Vastaa samalla kielella kuin kayttaja kysyy.
-- Ole tarkka ja ytimeras. Ala keksi tietoa jota ei ole lahteissa.
+Kaytossasi on lahdedokumentteja joista haet tietoa. Toimi nain:
+
+1. ENSISIJAINEN LAHDE: Kayta aina lahdedokumentteja pohjana. Viittaa niihin: [Lahde 1], [Lahde 2] jne.
+2. PAATTELY SALLITTU: Saat yhdistella tietoa eri lahteista, tehda johtopaatotksia ja analysoida sisaltoa syvallisesti.
+3. TAYDENTAVA TIETO: Jos lahteista ei loydy suoraa vastausta, voit taydentaa yleistiedollasi. Kerro silloin selkeasti: "Lahteiden perusteella..." vs "Yleisesti ottaen..."
+4. REHELLISYYS: Jos et loyda tietoa lahteista eika sinulla ole luotettavaa yleistietoa, sano se avoimesti.
+5. KIELI: Vastaa samalla kielella kuin kayttaja kysyy.
+6. SEURANTA: Voit esittaa tarkentavia kysymyksia jos kayttajan kysymys on monimerkityksinen.
 
 Lahdedokumentit:
 ${contextText || "Yhtaan osuvaa lahdetta ei loytynyt."}`;
