@@ -11,11 +11,12 @@ interface ChatRequest {
   folder_id: string;
   message: string;
   chat_id?: string; // olemassa oleva chat, tai luodaan uusi
+  reasoning?: boolean; // paattelymode paalle/pois
 }
 
 serve(async (req) => {
   try {
-    const { folder_id, message, chat_id } = (await req.json()) as ChatRequest;
+    const { folder_id, message, chat_id, reasoning = false } = (await req.json()) as ChatRequest;
 
     const authHeader = req.headers.get("Authorization")!;
     const supabase = createClient(
@@ -134,6 +135,24 @@ ${contextText || "Yhtaan osuvaa lahdetta ei loytynyt."}`;
       { role: "user", content: message },
     ];
 
+    // Rakenna API-pyynto - extended thinking jos reasoning paalla
+    const requestBody: Record<string, unknown> = {
+      model: reasoning ? "claude-sonnet-4-5-20250929" : "claude-sonnet-4-20250514",
+      system: systemPrompt,
+      messages: claudeMessages,
+    };
+
+    if (reasoning) {
+      // Extended thinking: Claude miettii ensin, sitten vastaa
+      requestBody.max_tokens = 16000;
+      requestBody.thinking = {
+        type: "enabled",
+        budget_tokens: 10000,
+      };
+    } else {
+      requestBody.max_tokens = 2048;
+    }
+
     const claudeResponse = await fetch(
       "https://api.anthropic.com/v1/messages",
       {
@@ -141,14 +160,9 @@ ${contextText || "Yhtaan osuvaa lahdetta ei loytynyt."}`;
         headers: {
           "x-api-key": Deno.env.get("ANTHROPIC_API_KEY")!,
           "content-type": "application/json",
-          "anthropic-version": "2023-06-01",
+          "anthropic-version": "2025-04-15",
         },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 2048,
-          system: systemPrompt,
-          messages: claudeMessages,
-        }),
+        body: JSON.stringify(requestBody),
       }
     );
 
@@ -158,8 +172,18 @@ ${contextText || "Yhtaan osuvaa lahdetta ei loytynyt."}`;
     }
 
     const claudeData = await claudeResponse.json();
-    const assistantMessage =
-      claudeData.content[0]?.text || "Vastauksen luonti epaonnistui.";
+
+    // Extended thinking palauttaa thinking + text blockit
+    let assistantMessage = "Vastauksen luonti epaonnistui.";
+    let thinkingContent: string | null = null;
+
+    for (const block of claudeData.content) {
+      if (block.type === "thinking") {
+        thinkingContent = block.thinking;
+      } else if (block.type === "text") {
+        assistantMessage = block.text;
+      }
+    }
 
     // 7. Tallenna assistentin vastaus
     await supabaseAdmin.from("messages").insert({
@@ -169,15 +193,22 @@ ${contextText || "Yhtaan osuvaa lahdetta ei loytynyt."}`;
       sources,
     });
 
+    const responseBody: Record<string, unknown> = {
+      chat_id: activeChatId,
+      message: assistantMessage,
+      sources: sources.map((s: any) => ({
+        file_name: s.file_name,
+        similarity: s.similarity,
+      })),
+    };
+
+    // Palauta paattelyprosessi frontendille jos reasoning paalla
+    if (thinkingContent) {
+      responseBody.thinking = thinkingContent;
+    }
+
     return new Response(
-      JSON.stringify({
-        chat_id: activeChatId,
-        message: assistantMessage,
-        sources: sources.map((s: any) => ({
-          file_name: s.file_name,
-          similarity: s.similarity,
-        })),
-      }),
+      JSON.stringify(responseBody),
       { headers: { "Content-Type": "application/json" } }
     );
   } catch (err) {
