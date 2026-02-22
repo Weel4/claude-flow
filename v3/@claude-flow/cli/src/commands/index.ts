@@ -65,6 +65,8 @@ const commandLoaders: Record<string, CommandLoader> = {
   benchmark: () => import('./benchmark.js'),
   // Guidance Control Plane
   guidance: () => import('./guidance.js'),
+  // UX Audit
+  'ux-audit': () => import('./ux-audit.js'),
 };
 
 // Cache for loaded commands
@@ -140,6 +142,7 @@ import { issuesCommand } from './issues.js';
 import updateCommand from './update.js';
 import { processCommand } from './process.js';
 import { guidanceCommand } from './guidance.js';
+import { uxAuditCommand } from './ux-audit.js';
 
 // Pre-populate cache with core commands
 loadedCommands.set('init', initCommand);
@@ -161,6 +164,7 @@ loadedCommands.set('security', securityCommand);
 loadedCommands.set('ruvector', ruvectorCommand);
 loadedCommands.set('hive-mind', hiveMindCommand);
 loadedCommands.set('guidance', guidanceCommand);
+loadedCommands.set('ux-audit', uxAuditCommand);
 
 // =============================================================================
 // Exports (maintain backwards compatibility)
@@ -186,6 +190,7 @@ export { securityCommand } from './security.js';
 export { ruvectorCommand } from './ruvector/index.js';
 export { hiveMindCommand } from './hive-mind.js';
 export { guidanceCommand } from './guidance.js';
+export { uxAuditCommand } from './ux-audit.js';
 
 // Lazy-loaded command re-exports (for backwards compatibility, but async-only)
 export async function getConfigCommand() { return loadCommand('config'); }
@@ -210,6 +215,7 @@ export async function getProgressCommand() { return loadCommand('progress'); }
 export async function getIssuesCommand() { return loadCommand('issues'); }
 export async function getRuvectorCommand() { return loadCommand('ruvector'); }
 export async function getGuidanceCommand() { return loadCommand('guidance'); }
+export async function getUxAuditCommand() { return loadCommand('ux-audit'); }
 
 /**
  * Core commands loaded synchronously (available immediately)
@@ -236,6 +242,7 @@ export const commands: Command[] = [
   ruvectorCommand,
   hiveMindCommand,
   guidanceCommand,
+  uxAuditCommand,
 ];
 
 /**
@@ -275,6 +282,7 @@ export const commandsByCategory = {
     analyzeCommand,
     routeCommand,
     progressCommand,
+    uxAuditCommand,
   ],
   management: [
     providersCommand,
