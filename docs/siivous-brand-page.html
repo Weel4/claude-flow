@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Siivous.com — Professional Cleaning Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #000000;
+      --grey:    #666666;
+      --dark:    #111111;
+      --white:   #FFFFFF;
+      --sp-sm:   32px;
+      --sp-md:   48px;
+      --sp-lg:   64px;
+      --sp-xl:   96px;
+      --sp-2xl:  128px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--black);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── Film Grain Overlay ────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ─── Swiss Grid Background ─────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────────── */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    p { font-weight: 300; color: var(--grey); }
+
+    a { color: var(--black); text-decoration: none; }
+
+    /* ─── Layout Utilities ──────────────────────────────────────────── */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+    }
+
+    .grid-12 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 0;
+    }
+
+    section { position: relative; z-index: 1; }
+
+    /* ─── Navigation ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      padding: 0 var(--sp-md);
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.125rem;
+      letter-spacing: -0.04em;
+      color: var(--black);
+    }
+
+    .nav-logo span { font-weight: 300; color: var(--grey); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--grey);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--black); }
+
+    .nav-cta {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--black);
+      color: var(--white) !important;
+      padding: 12px 24px;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--dark); color: var(--white); }
+
+    /* ─── Hero ──────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding-top: 72px;
+    }
+
+    .hero-content {
+      grid-column: 1 / 8;
+      padding: var(--sp-2xl) var(--sp-md) var(--sp-2xl) var(--sp-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .hero-eyebrow {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: var(--sp-md);
+    }
+
+    .hero-title {
+      font-size: clamp(4rem, 8vw, 9rem);
+      font-weight: 300;
+      letter-spacing: -0.045em;
+      line-height: 0.95;
+      color: var(--black);
+      margin-bottom: var(--sp-lg);
+    }
+
+    .hero-title strong {
+      font-weight: 700;
+      display: block;
+    }
+
+    .hero-sub {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--grey);
+      max-width: 480px;
+      margin-bottom: var(--sp-lg);
+    }
+
+    .hero-actions { display: flex; gap: 16px; align-items: center; }
+
+    .btn-primary {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--black);
+      color: var(--white);
+      padding: 18px 40px;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--dark); }
+
+    .btn-secondary {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey);
+      padding: 18px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-secondary:hover { color: var(--black); border-color: var(--black); }
+
+    .hero-visual {
+      grid-column: 8 / 13;
+      position: relative;
+      overflow: hidden;
+      background: #f5f5f5;
+    }
+
+    .hero-visual-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Abstract photography placeholder — large geometric composition */
+    .hero-photo {
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(135deg, #e8e8e8 0%, #f0f0f0 40%, #d8d8d8 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-photo::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -20%;
+      width: 80%;
+      height: 80%;
+      background: var(--black);
+      transform: rotate(15deg);
+    }
+
+    .hero-photo::after {
+      content: '';
+      position: absolute;
+      bottom: 10%;
+      right: 10%;
+      width: 40%;
+      height: 55%;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    /* Rotated text accent */
+    .rotated-label {
+      position: absolute;
+      right: var(--sp-sm);
+      bottom: var(--sp-lg);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+      transform: rotate(-90deg);
+      transform-origin: right bottom;
+      white-space: nowrap;
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: var(--sp-md);
+      left: var(--sp-md);
+    }
+
+    .hero-stats-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      display: block;
+    }
+
+    .hero-stats-label {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ─── Marquee Bar ───────────────────────────────────────────────── */
+    .marquee-bar {
+      background: var(--black);
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 28s linear infinite;
+      padding: 16px 0;
+    }
+
+    .marquee-item {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      padding: 0 40px;
+      flex-shrink: 0;
+    }
+
+    .marquee-item strong {
+      color: rgba(255,255,255,0.9);
+      font-weight: 500;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── Services Section ──────────────────────────────────────────── */
+    .services {
+      padding: var(--sp-2xl) 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      margin-bottom: var(--sp-xl);
+      padding: 0 var(--sp-md);
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: var(--sp-xl);
+    }
+
+    .section-label {
+      grid-column: 1 / 4;
+      padding-top: 6px;
+    }
+
+    .section-label-text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    .section-title {
+      grid-column: 4 / 11;
+      font-size: clamp(2rem, 4vw, 3.75rem);
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+    }
+
+    .services-grid {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .service-card {
+      padding: var(--sp-lg) var(--sp-md);
+      border-right: 1px solid rgba(0,0,0,0.08);
+      transition: background 0.25s;
+      cursor: default;
+    }
+
+    .service-card:last-child { border-right: none; }
+    .service-card:hover { background: #fafafa; }
+
+    .service-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: rgba(0,0,0,0.2);
+      margin-bottom: var(--sp-lg);
+      display: block;
+    }
+
+    .service-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--black);
+      margin-bottom: var(--sp-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-icon svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 1.5; }
+
+    .service-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      color: var(--black);
+    }
+
+    .service-desc {
+      font-size: 0.9375rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--grey);
+      margin-bottom: var(--sp-md);
+    }
+
+    .service-link {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 2px;
+      transition: gap 0.2s;
+    }
+
+    .service-link:hover { gap: 14px; }
+
+    /* ─── Process Section ───────────────────────────────────────────── */
+    .process {
+      padding: var(--sp-2xl) 0;
+      background: var(--black);
+      color: var(--white);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .process .section-label-text { color: rgba(255,255,255,0.35); }
+    .process .section-title { color: var(--white); }
+
+    .process-steps {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .process-step {
+      padding: var(--sp-lg) var(--sp-md);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+
+    .process-step:last-child { border-right: none; }
+
+    .process-step-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+      margin-bottom: var(--sp-sm);
+    }
+
+    .process-step-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .process-step-desc {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ─── About / Editorial ─────────────────────────────────────────── */
+    .about {
+      padding: var(--sp-2xl) 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .about-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 0;
+      align-items: start;
+    }
+
+    .about-visual {
+      grid-column: 1 / 6;
+      position: relative;
+      padding-right: var(--sp-lg);
+    }
+
+    .about-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #ebebeb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #e0e0e0 0%, #c8c8c8 50%, #b8b8b8 100%);
+    }
+
+    .about-img::after {
+      content: '';
+      position: absolute;
+      top: var(--sp-md);
+      left: var(--sp-md);
+      right: var(--sp-md);
+      bottom: var(--sp-md);
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
+    .about-rotated {
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: rotate(-90deg) translateX(50%);
+      transform-origin: right center;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      white-space: nowrap;
+    }
+
+    .about-content {
+      grid-column: 6 / 13;
+      padding-left: var(--sp-lg);
+      padding-top: var(--sp-sm);
+    }
+
+    .about-kicker {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: var(--sp-md);
+    }
+
+    .about-title {
+      font-size: clamp(2rem, 3.5vw, 3.25rem);
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      margin-bottom: var(--sp-md);
+    }
+
+    .about-body {
+      font-size: 1.0625rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--grey);
+      max-width: 520px;
+      margin-bottom: var(--sp-lg);
+    }
+
+    .about-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(0,0,0,0.08);
+      margin-top: var(--sp-lg);
+    }
+
+    .metric {
+      padding: var(--sp-sm) 0;
+      border-right: 1px solid rgba(0,0,0,0.08);
+      padding-right: var(--sp-sm);
+      margin-right: var(--sp-sm);
+    }
+
+    .metric:last-child { border-right: none; }
+
+    .metric-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--black);
+      line-height: 1;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    /* ─── Testimonials ──────────────────────────────────────────────── */
+    .testimonials {
+      padding: var(--sp-2xl) 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .testimonials-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(0,0,0,0.08);
+      margin-top: var(--sp-lg);
+    }
+
+    .testimonial {
+      padding: var(--sp-lg) var(--sp-md);
+      border-right: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .testimonial:last-child { border-right: none; }
+
+    .testimonial-quote {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      line-height: 1.35;
+      color: var(--black);
+      margin-bottom: var(--sp-md);
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      background: #e0e0e0;
+      flex-shrink: 0;
+    }
+
+    .author-name {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--black);
+      display: block;
+    }
+
+    .author-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: var(--grey);
+    }
+
+    /* ─── Pricing ───────────────────────────────────────────────────── */
+    .pricing {
+      padding: var(--sp-2xl) 0;
+      background: #f8f8f8;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .pricing-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(0,0,0,0.08);
+      margin-top: var(--sp-lg);
+    }
+
+    .pricing-card {
+      padding: var(--sp-lg) var(--sp-md);
+      background: var(--white);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-right: none;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .pricing-card:last-child { border-right: 1px solid rgba(0,0,0,0.08); }
+    .pricing-card:hover { transform: translateY(-4px); }
+
+    .pricing-card.featured {
+      background: var(--black);
+      border-color: var(--black);
+    }
+
+    .pricing-badge {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--white);
+      color: var(--black);
+      padding: 4px 10px;
+      display: inline-block;
+      margin-bottom: var(--sp-md);
+    }
+
+    .pricing-tier {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 12px;
+    }
+
+    .pricing-card.featured .pricing-tier { color: rgba(255,255,255,0.4); }
+
+    .pricing-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      color: var(--black);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .pricing-card.featured .pricing-price { color: var(--white); }
+
+    .pricing-period {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 300;
+      color: var(--grey);
+      margin-bottom: var(--sp-md);
+    }
+
+    .pricing-card.featured .pricing-period { color: rgba(255,255,255,0.4); }
+
+    .pricing-divider {
+      height: 1px;
+      background: rgba(0,0,0,0.08);
+      margin-bottom: var(--sp-md);
+    }
+
+    .pricing-card.featured .pricing-divider { background: rgba(255,255,255,0.1); }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: var(--sp-lg);
+    }
+
+    .pricing-features li {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--grey);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-card.featured .pricing-features li {
+      color: rgba(255,255,255,0.55);
+      border-bottom-color: rgba(255,255,255,0.06);
+    }
+
+    .pricing-features li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--black);
+      flex-shrink: 0;
+    }
+
+    .pricing-card.featured .pricing-features li::before { background: rgba(255,255,255,0.4); }
+
+    .btn-pricing {
+      display: block;
+      text-align: center;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 16px 24px;
+      background: transparent;
+      border: 1px solid rgba(0,0,0,0.15);
+      color: var(--black);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-pricing:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    .pricing-card.featured .btn-pricing {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    .pricing-card.featured .btn-pricing:hover { background: rgba(255,255,255,0.85); }
+
+    /* ─── CTA Section ───────────────────────────────────────────────── */
+    .cta {
+      padding: var(--sp-2xl) 0;
+      background: var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: 'SIIVOUS';
+      position: absolute;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 22vw;
+      letter-spacing: -0.06em;
+      color: rgba(255,255,255,0.03);
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .cta-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      align-items: center;
+    }
+
+    .cta-content { grid-column: 1 / 9; }
+
+    .cta-kicker {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: var(--sp-md);
+    }
+
+    .cta-title {
+      font-size: clamp(2.5rem, 5vw, 5.5rem);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: var(--sp-lg);
+    }
+
+    .cta-title strong { font-weight: 700; }
+
+    .cta-actions { grid-column: 9 / 13; text-align: right; }
+
+    .btn-white {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--white);
+      color: var(--black);
+      padding: 20px 48px;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .btn-white:hover { background: #f0f0f0; color: var(--black); }
+
+    .cta-note {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.25);
+      margin-top: 12px;
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: var(--sp-xl) 0 var(--sp-lg);
+    }
+
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--sp-xl);
+      margin-bottom: var(--sp-xl);
+    }
+
+    .footer-brand-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .footer-tagline {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+      max-width: 280px;
+      margin-bottom: var(--sp-md);
+    }
+
+    .footer-col-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      margin-bottom: 20px;
+    }
+
+    .footer-links { list-style: none; }
+
+    .footer-links li { margin-bottom: 12px; }
+
+    .footer-links a {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-bottom {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: var(--sp-md) var(--sp-md) 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.2);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-legal a {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.2);
+      transition: color 0.2s;
+    }
+
+    .footer-legal a:hover { color: rgba(255,255,255,0.5); }
+
+    /* ─── Responsive ────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-content { grid-column: 1/-1; border-right: none; min-height: 90vh; }
+      .hero-visual { display: none; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .about-inner { grid-template-columns: 1fr; }
+      .about-visual { grid-column: 1/-1; padding-right: 0; margin-bottom: var(--sp-lg); }
+      .about-content { grid-column: 1/-1; padding-left: 0; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .testimonial { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card { border-right: 1px solid rgba(0,0,0,0.08) !important; margin-bottom: 0; border-bottom: none; }
+      .cta-inner { grid-template-columns: 1fr; }
+      .cta-content { grid-column: 1/-1; }
+      .cta-actions { grid-column: 1/-1; text-align: left; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: var(--sp-lg); }
+      .nav-links { display: none; }
+      .about-metrics { grid-template-columns: 1fr; }
+      .section-header { grid-template-columns: 1fr; }
+      .section-label, .section-title { grid-column: 1/-1; }
+      .section-label { margin-bottom: 16px; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --sp-md: 24px; --sp-lg: 40px; --sp-xl: 64px; --sp-2xl: 80px; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 16px; align-items: flex-start; }
+      .process-steps { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Scroll Reveal ─────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ──────────────────────────────────────────────────── -->
+  <nav aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Siivous.com">Siivous<span>.com</span></a>
+      <ul class="nav-links" role="list">
+        <li><a href="#services">Palvelut</a></li>
+        <li><a href="#about">Meistä</a></li>
+        <li><a href="#pricing">Hinnat</a></li>
+        <li><a href="#contact" class="nav-cta">Tilaa siivous</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Hero ────────────────────────────────────────────────────────── -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <p class="hero-eyebrow" aria-label="Brand tagline">Professional Cleaning Services — Helsinki</p>
+      <h1 class="hero-title" id="hero-title">
+        Puhtaus<br>
+        <strong>ilman</strong><br>
+        kompromisseja
+      </h1>
+      <p class="hero-sub">
+        Ammattimainen siivouspalvelu koteihin ja yrityksiin.
+        Täsmällistä, luotettavaa ja ekologista — joka kerta.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Varaa aika</a>
+        <a href="#services" class="btn-secondary">Tutustu palveluihin →</a>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-photo">
+        <div class="hero-stats">
+          <span class="hero-stats-num">4800+</span>
+          <span class="hero-stats-label">Tyytyväistä asiakasta</span>
+        </div>
+      </div>
+      <span class="rotated-label">Certified Professional Cleaning</span>
+    </div>
+  </section>
+
+  <!-- ── Marquee Bar ──────────────────────────────────────────────────── -->
+  <div class="marquee-bar" aria-hidden="true">
+    <div class="marquee-track">
+      <!-- duplicated for seamless loop -->
+      <span class="marquee-item"><strong>Kotisiivous</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Toimistosiivous</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Muuttosiivoukset</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Ikkunanpesu</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Syväpuhdistus</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Ekologiset tuotteet</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Vakuutettu palvelu</strong></span>
+      <span class="marquee-item">·</span>
+      <!-- duplicate -->
+      <span class="marquee-item"><strong>Kotisiivous</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Toimistosiivous</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Muuttosiivoukset</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Ikkunanpesu</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Syväpuhdistus</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Ekologiset tuotteet</strong></span>
+      <span class="marquee-item">·</span>
+      <span class="marquee-item"><strong>Vakuutettu palvelu</strong></span>
+      <span class="marquee-item">·</span>
+    </div>
+  </div>
+
+  <!-- ── Services ─────────────────────────────────────────────────────── -->
+  <section class="services" id="services" aria-labelledby="services-title">
+    <div class="section-header">
+      <div class="section-label"><p class="section-label-text">01 / Palvelut</p></div>
+      <h2 class="section-title reveal" id="services-title">
+        Kaikki siivouksesi<br>yhdestä paikasta
+      </h2>
+    </div>
+
+    <div class="services-grid">
+      <article class="service-card reveal">
+        <span class="service-number">001</span>
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3 class="service-name">Kotisiivous</h3>
+        <p class="service-desc">Säännöllinen tai kertaluonteinen siivous kotisi tarpeisiin. Luotettava siivooja tulee ajallaan, joka kerta.</p>
+        <a href="#contact" class="service-link">Lue lisää <span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="service-card reveal reveal-delay-1">
+        <span class="service-number">002</span>
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3 class="service-name">Toimistosiivous</h3>
+        <p class="service-desc">Ammattilaissiivous toimistoille, liiketiloille ja julkisille tiloille. Sovitetaan aikatauluusi — myös yöllä.</p>
+        <a href="#contact" class="service-link">Lue lisää <span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="service-card reveal reveal-delay-2">
+        <span class="service-number">003</span>
+        <div class="service-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <h3 class="service-name">Muuttosiivoukset</h3>
+        <p class="service-desc">Poismuutto- tai sisäänmuuttosiivoukset. Teemme tilasta puhtaan läpikotaisin — takuu tuloksesta.</p>
+        <a href="#contact" class="service-link">Lue lisää <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── Process ───────────────────────────────────────────────────────── -->
+  <section class="process" aria-labelledby="process-title">
+    <div class="section-header" style="margin-bottom: var(--sp-xl);">
+      <div class="section-label"><p class="section-label-text" style="color:rgba(255,255,255,0.3)">02 / Miten se toimii</p></div>
+      <h2 class="section-title reveal" id="process-title" style="color:white">
+        Neljä askelta<br>täydelliseen puhtauteen
+      </h2>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="process-step-num" aria-hidden="true">01</div>
+        <h3 class="process-step-title">Tilaa verkossa</h3>
+        <p class="process-step-desc">Valitse sopiva palvelu ja aika suoraan kalenteristamme. Vahvistus tulee välittömästi.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="process-step-num" aria-hidden="true">02</div>
+        <h3 class="process-step-title">Räätälöidään palvelu</h3>
+        <p class="process-step-desc">Kerrot tarpeesi, me kartoitamme — ja muodostamme täsmällisen siivoussuunnitelman.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="process-step-num" aria-hidden="true">03</div>
+        <h3 class="process-step-title">Ammattilainen saapuu</h3>
+        <p class="process-step-desc">Koulutettu ja tarkastettu siivooja saapuu sovittuna aikana omilla välineillään.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="process-step-num" aria-hidden="true">04</div>
+        <h3 class="process-step-title">Nauti puhtaudesta</h3>
+        <p class="process-step-desc">Tarkistamme lopputuloksen. Jos jokin ei täytä standardejamme, korjaamme sen veloituksetta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── About ─────────────────────────────────────────────────────────── -->
+  <section class="about" id="about" aria-labelledby="about-title">
+    <div class="about-inner">
+      <div class="about-visual reveal">
+        <div class="about-img" role="img" aria-label="Professional cleaner at work"></div>
+        <span class="about-rotated" aria-hidden="true">Est. 2018 — Helsinki, Finland</span>
+      </div>
+
+      <div class="about-content">
+        <p class="about-kicker reveal">03 / Meistä</p>
+        <h2 class="about-title reveal" id="about-title">
+          Siivous on<br>tarkkuuslaji
+        </h2>
+        <p class="about-body reveal">
+          Olemme suomalainen siivousyritys, joka uskoo siihen, että puhtaus ei ole kompromissi.
+          Koulutamme ammattilaisemme huolella, käytämme vain ekologisesti sertifioituja tuotteita
+          ja seisomme jokaisen työn takana.
+        </p>
+        <p class="about-body reveal reveal-delay-1">
+          Siivous.com on perustettu 2018 yhdellä ainoalla tavoitteella: tehdä kotisi ja työtilasi
+          paikaksi, jossa haluaa olla. Missä ilma tuntuu raikkaalta ja pinnat puhtailta.
+        </p>
+        <div class="about-metrics reveal reveal-delay-2">
+          <div class="metric">
+            <span class="metric-value">4800+</span>
+            <span class="metric-label">Asiakasta</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value">98%</span>
+            <span class="metric-label">Tyytyväisyys</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value">7+</span>
+            <span class="metric-label">Vuotta alalla</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Testimonials ──────────────────────────────────────────────────── -->
+  <section class="testimonials" aria-labelledby="testimonials-title">
+    <div class="testimonials-inner">
+      <div class="section-header" style="padding:0; max-width:100%; margin-bottom:0;">
+        <div class="section-label"><p class="section-label-text">04 / Asiakaskokemukset</p></div>
+        <h2 class="section-title reveal" id="testimonials-title">Mitä asiakkaat sanovat</h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <blockquote class="testimonial reveal">
+          <p class="testimonial-quote">"Paras siivouspalvelu jonka olen käyttänyt. Ammattimaista, täsmällistä ja kotona tuoksuu raikkaalta."</p>
+          <footer class="testimonial-author">
+            <div class="author-avatar" role="img" aria-label="Profile photo"></div>
+            <div>
+              <span class="author-name">Maria Korhonen</span>
+              <span class="author-title">Kotiasiakgas, Helsinki</span>
+            </div>
+          </footer>
+        </blockquote>
+
+        <blockquote class="testimonial reveal reveal-delay-1">
+          <p class="testimonial-quote">"Toimistomme on nyt siistimpi kuin koskaan. Luotettava, joustava ja helppo tilata uudelleen."</p>
+          <footer class="testimonial-author">
+            <div class="author-avatar" role="img" aria-label="Profile photo"></div>
+            <div>
+              <span class="author-name">Jarkko Virtanen</span>
+              <span class="author-title">Toimitusjohtaja, Espoo</span>
+            </div>
+          </footer>
+        </blockquote>
+
+        <blockquote class="testimonial reveal reveal-delay-2">
+          <p class="testimonial-quote">"Muuttosiivoukseen tuli kaksi ammattilaista ja loppotulos oli täydellinen. Vuokranantaja kiitteli!"</p>
+          <footer class="testimonial-author">
+            <div class="author-avatar" role="img" aria-label="Profile photo"></div>
+            <div>
+              <span class="author-name">Aino Mäkinen</span>
+              <span class="author-title">Yksityisasiakas, Tampere</span>
+            </div>
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pricing ───────────────────────────────────────────────────────── -->
+  <section class="pricing" id="pricing" aria-labelledby="pricing-title">
+    <div class="pricing-inner">
+      <div class="section-header" style="padding:0; max-width:100%; margin-bottom:0;">
+        <div class="section-label"><p class="section-label-text">05 / Hinnat</p></div>
+        <h2 class="section-title reveal" id="pricing-title">
+          Selkeät hinnat,<br>ei yllätyksiä
+        </h2>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card reveal">
+          <p class="pricing-tier">Perus</p>
+          <div class="pricing-price">€89</div>
+          <p class="pricing-period">/ kerta, n. 50 m²</p>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>Yleissiivous kaikki huoneet</li>
+            <li>Pölynimurointi ja lattianpesu</li>
+            <li>Keittiö ja kylpyhuone</li>
+            <li>Ekoloogiset puhdistusaineet</li>
+          </ul>
+          <a href="#contact" class="btn-pricing">Tilaa nyt</a>
+        </div>
+
+        <div class="pricing-card featured reveal reveal-delay-1">
+          <span class="pricing-badge">Suosituin</span>
+          <p class="pricing-tier">Kattava</p>
+          <div class="pricing-price" style="color:white">€149</div>
+          <p class="pricing-period">/ kerta, n. 80 m²</p>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>Kaikki Perus-palvelun sisältö</li>
+            <li>Ikkunoiden sisäpesut</li>
+            <li>Kodinkoneiden sisäpuolet</li>
+            <li>Kaappien ulkopinnat</li>
+            <li>Prioriteettivaraus</li>
+          </ul>
+          <a href="#contact" class="btn-pricing">Tilaa nyt</a>
+        </div>
+
+        <div class="pricing-card reveal reveal-delay-2">
+          <p class="pricing-tier">Yritys</p>
+          <div class="pricing-price">Tarjous</div>
+          <p class="pricing-period">/ räätälöity sopimus</p>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>Säännöllinen siivousohjelma</li>
+            <li>Oma nimetty siivooja</li>
+            <li>Yö- ja viikonloppupalvelut</li>
+            <li>Laskutussopimus yrityksille</li>
+            <li>Asiakasvastaava käytettävissä</li>
+          </ul>
+          <a href="#contact" class="btn-pricing">Pyydä tarjous</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────────── -->
+  <section class="cta" id="contact" aria-labelledby="cta-title">
+    <div class="cta-inner">
+      <div class="cta-content reveal">
+        <p class="cta-kicker">Aloita tänään</p>
+        <h2 class="cta-title" id="cta-title">
+          Varaa ensimmäinen<br>
+          <strong>siivous nyt</strong>
+        </h2>
+      </div>
+      <div class="cta-actions reveal reveal-delay-1">
+        <a href="tel:+358401234567" class="btn-white">Soita meille</a>
+        <p class="cta-note">Tai kirjoita osoitteeseen info@siivous.com</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────── -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand-name">Siivous.com</div>
+        <p class="footer-tagline">Professional Cleaning Services — Helsinki, Espoo, Tampere ja koko Suomi.</p>
+      </div>
+
+      <nav aria-label="Footer services">
+        <p class="footer-col-title">Palvelut</p>
+        <ul class="footer-links" role="list">
+          <li><a href="#">Kotisiivous</a></li>
+          <li><a href="#">Toimistosiivous</a></li>
+          <li><a href="#">Muuttosiivoukset</a></li>
+          <li><a href="#">Ikkunanpesu</a></li>
+          <li><a href="#">Syväpuhdistus</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Footer company links">
+        <p class="footer-col-title">Yritys</p>
+        <ul class="footer-links" role="list">
+          <li><a href="#">Meistä</a></li>
+          <li><a href="#">Tiimi</a></li>
+          <li><a href="#">Ura meillä</a></li>
+          <li><a href="#">Yhteystiedot</a></li>
+          <li><a href="#">Blogi</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Footer legal links">
+        <p class="footer-col-title">Asiakkaille</p>
+        <ul class="footer-links" role="list">
+          <li><a href="#">Tilaa siivous</a></li>
+          <li><a href="#">Hinnat</a></li>
+          <li><a href="#">UKK</a></li>
+          <li><a href="#">Asiakaspalvelu</a></li>
+          <li><a href="#">Lahjakortit</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Siivous.com Oy. Kaikki oikeudet pidätetään.</p>
+      <nav class="footer-legal" aria-label="Legal">
+        <a href="#">Tietosuoja</a>
+        <a href="#">Käyttöehdot</a>
+        <a href="#">Evästeet</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- ── Scroll Reveal Script ──────────────────────────────────────────── -->
+  <script>
+    (function () {
+      'use strict';
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+</body>
+</html>
